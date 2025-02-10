@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>出口退税申报</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: #fff; /* 修改为白色背景 */
+        }
+
+        .fullscreen-img {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+            cursor: pointer;
+            transition: opacity 0.5s;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <img src="1.png" class="fullscreen-img" 
+         id="mainImage"
+         alt="出口退税流程演示"
+         title="点击进入下一步">
+    <audio id="mouseClickSound" src="鼠标声.mp3" preload="auto" class="hidden"></audio>
+
+    <script>
+        const stepSequence = [1,2,3,4,5,6,61,7,8,9];
+        let currentStepIndex = 0;
+        const mainImage = document.getElementById('mainImage');
+        const mouseClickSound = document.getElementById('mouseClickSound');
+
+        function navigateToNext() {
+            mainImage.style.opacity = 0;
+            setTimeout(() => {
+                currentStepIndex = (currentStepIndex + 1) % stepSequence.length;
+                const nextStep = stepSequence[currentStepIndex];
+                mainImage.src = `${nextStep}.png`;
+                mainImage.style.opacity = 1;
+                // 播放鼠标声
+                mouseClickSound.currentTime = 0; // 从头开始播放
+                mouseClickSound.play();
+            }, 100);
+        }
+
+        mainImage.addEventListener('click', navigateToNext);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                navigateToNext();
+            } else if (e.key === 'ArrowLeft') {
+                currentStepIndex = (currentStepIndex - 2 + stepSequence.length) % stepSequence.length;
+                navigateToNext();
+            }
+        });
+    </script>
+</body>
+</html>
